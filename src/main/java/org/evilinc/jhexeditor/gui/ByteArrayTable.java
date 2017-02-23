@@ -1,0 +1,50 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.evilinc.jhexeditor.gui;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTable;
+
+/**
+ *
+ * @author teton
+ */
+public class ByteArrayTable extends JTable {
+
+    private ByteArrayTableModel model;
+
+    public ByteArrayTable() {
+    }
+    
+    public ByteArrayTable(final String fileToOpen) {
+        super();
+        try {
+            final byte[] data = Files.readAllBytes(Paths.get(fileToOpen));
+            setTableModel(new ByteArrayTableModel(data));
+        } catch (IOException ex) {
+            Logger.getLogger(ByteArrayTable.class.getName()).log(Level.SEVERE, null, ex);
+            setModel(new EmptyByteArrayTableModel());
+        }
+    }
+    
+    public void setNumberOfColumns(final int numberOfColumns) {
+        model.setNumberOfColumns(numberOfColumns);
+    }
+
+    public void setTableModel(final ByteArrayTableModel tableModelToSet) {
+        if (tableModelToSet == null) {
+            model = new EmptyByteArrayTableModel();
+        } else {
+            model = tableModelToSet;
+        }
+        setModel(model);
+    }
+
+}
